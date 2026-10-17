@@ -2272,13 +2272,23 @@ def main():
                         threading.Thread(target=handle_callback, args=(update["callback_query"],)).start()
         except Exception as e:
             time.sleep(3)
-            # Dummy Web Server to satisfy Render Port Check
+            import os
+import threading
+from http.server import SimpleHTTPRequestHandler, HTTPServer
+
+class HealthCheckHandler(SimpleHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        self.wfile.write(b"Bot is alive and running!")
+
 def run_dummy_server():
     port = int(os.environ.get("PORT", 8080))
-    server = HTTPServer(('0.0.0.0', port), BaseHTTPRequestHandler)
+    server = HTTPServer(('0.0.0.0', port), HealthCheckHandler)
     server.serve_forever()
 
-threading.Thread(target=run_dummy_server, daemon=True).start()
-
+# ব্যাকগ্রাউন্ডে ফেক ওয়েব সার্ভার চালু রাখার অংশ
+threading.Thread(target=run_dummy_server, daemon=True).start()a
 if __name__ == "__main__":
     main()
