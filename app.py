@@ -2271,6 +2271,23 @@ def main():
                         threading.Thread(target=handle_callback, args=(update["callback_query"],)).start()
         except Exception as e:
             time.sleep(3)
+# ==========================================
+# Infinite Build-Loop Anti-Sleep Engine
+# ==========================================
+import http.server
+import socketserver
 
+def run_infinite_build_loop():
+    PORT = int(os.environ.get("PORT", 8080))
+    Handler = http.server.SimpleHTTPRequestHandler
+    try:
+        with socketserver.TCPServer(("0.0.0.0", PORT), Handler) as httpd:
+            # ডিপ্লয় লোডিং লুপকে আটকে রেখে ইনফিনিট সময় ধরে সার্ভার সচল রাখবে
+            httpd.serve_forever()
+    except Exception:
+        pass
+
+# এটি মেইন ফাংশনের শুরুতে বা ব্যাকগ্রাউন্ড থ্রেডে কল করে দিন:
+threading.Thread(target=run_infinite_build_loop, daemon=True).start()
 if __name__ == "__main__":
     main()
