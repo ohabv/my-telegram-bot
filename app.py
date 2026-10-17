@@ -2272,11 +2272,7 @@ def main():
                         threading.Thread(target=handle_callback, args=(update["callback_query"],)).start()
         except Exception as e:
             time.sleep(3)
-            import os
-import threading
-from http.server import SimpleHTTPRequestHandler, HTTPServer
-
-class HealthCheckHandler(SimpleHTTPRequestHandler):
+            class HealthCheckHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
@@ -2288,7 +2284,6 @@ def run_dummy_server():
     server = HTTPServer(('0.0.0.0', port), HealthCheckHandler)
     server.serve_forever()
 
-# ব্যাকগ্রাউন্ডে ফেক ওয়েব সার্ভার চালু রাখার অংশ
-threading.Thread(target=run_dummy_server, daemon=True).start()a
+threading.Thread(target=run_dummy_server, daemon=True).start()
 if __name__ == "__main__":
     main()
