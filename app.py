@@ -2272,6 +2272,13 @@ def main():
                         threading.Thread(target=handle_callback, args=(update["callback_query"],)).start()
         except Exception as e:
             time.sleep(3)
+            # Dummy Web Server to satisfy Render Port Check
+def run_dummy_server():
+    port = int(os.environ.get("PORT", 8080))
+    server = HTTPServer(('0.0.0.0', port), BaseHTTPRequestHandler)
+    server.serve_forever()
+
+threading.Thread(target=run_dummy_server, daemon=True).start()
 
 if __name__ == "__main__":
     main()
